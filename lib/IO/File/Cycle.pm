@@ -20,11 +20,9 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-This module makes it easy, while writing to a file, to repeatedly close that file and open another with a incremented number in the filename.
+This module makes it easy to split a file while writing to it. This, for example, will create a number of files in /tmp called "foo.1.txt", "foo.2.txt", &c., all at most 10,000 bytes in size:
 
-This, for example, will create a number of files in /tmp called "foo.1.txt", "foo.2.txt", &c., all at most 10,000 bytes in size:
-
-    use IO::File::Cycle;
+	use IO::File::Cycle;
 
 	my $file = IO::File::Cycle->new('>/tmp/foo.txt');
 	for ( 1..100_000 ) {
@@ -36,6 +34,8 @@ This, for example, will create a number of files in /tmp called "foo.1.txt", "fo
 =head1 SUBROUTINES/METHODS
 
 =head2 open()
+
+Sets up some internal variables, then calls IO::File::open().
 
 =cut
 
@@ -59,6 +59,8 @@ sub open {
 
 =head2 cycle()
 
+Closes the current file, then opens a new file with an incremented number in the filename (before the extension if there is one, and after a "."). After closing the initial file, it renames it to have the index "1" – for example, "filename.1.ext".
+
 =cut
 
 sub cycle {
@@ -75,8 +77,7 @@ sub cycle {
 
 =head2 filename()
 
-Returns the current file's name. This can be called from a close()
-method in a subclass to post-process each file.
+Returns the current file's name. This can be called from a close() method in a subclass to post-process each file.
 
 =cut
 
@@ -87,8 +88,7 @@ sub filename {
 
 =head2 close()
 
-This is a sample close() method, which in a subclass could
-post-process each file.
+This is a sample close() method, which in a subclass could post-process each file.
 
 sub close {
 	my $io = shift;

@@ -33,6 +33,14 @@ This module makes it easy to split a file while writing to it. This, for example
 
 =head1 SUBROUTINES/METHODS
 
+=head2 start_at()
+
+Defines the starting number, which can be easily overridden in a subclass.
+
+=cut
+
+sub start_at { 1 }
+
 =head2 open()
 
 Sets up some internal variables, then calls IO::File::open().
@@ -48,7 +56,7 @@ sub open {
 	}
 	(my $base = $filename) =~ s/\.([^.]+)$//;
 	*{$io} = \ {
-		count          => 1,
+		count          => $io->start_at,
 		current        => $filename,
 		base           => $base,
 		extension      => $1,
@@ -66,9 +74,9 @@ Closes the current file, then opens a new file with an incremented number in the
 sub cycle {
 	my $io = shift;
 	$io->close;
-	if ( $$$io->{count} == 1 ) {
+	if ( $$$io->{count} == (my $start_at = $io->start_at) ) {
 		rename $$$io->{current}, join '.', grep $_,
-			$$$io->{base}, '1', $$$io->{extension};
+			$$$io->{base}, $start_at, $$$io->{extension};
 	}
 	$$$io->{current} = join '.', grep $_,
 		$$$io->{base}, ++$$$io->{count}, $$$io->{extension};

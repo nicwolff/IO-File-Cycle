@@ -65,6 +65,17 @@ sub open {
 	$io->SUPER::open($filename, @mode_and_perms);
 }
 
+=head2 format_filename()
+
+Formats the filename.
+
+=cut
+
+sub format_filename {
+	my $io = shift;
+	return join '.', grep $_, $$$io->{base}, shift, $$$io->{extension};
+}
+
 =head2 cycle()
 
 Closes the current file, then opens a new file with an incremented number in the filename (before the extension if there is one, and after a "."). After closing the initial file, it renames it to have the index "1" – for example, "filename.1.ext".
@@ -75,11 +86,9 @@ sub cycle {
 	my $io = shift;
 	$io->close;
 	if ( $$$io->{count} == (my $start_at = $io->start_at) ) {
-		rename $$$io->{current}, join '.', grep $_,
-			$$$io->{base}, $start_at, $$$io->{extension};
+		rename $$$io->{current}, $io->format_filename( $start_at );
 	}
-	$$$io->{current} = join '.', grep $_,
-		$$$io->{base}, ++$$$io->{count}, $$$io->{extension};
+	$$$io->{current} = $io->format_filename( ++$$$io->{count} );
 	$io->SUPER::open($$$io->{current}, @{$$$io->{mode_and_perms}});
 }
 

@@ -6,3 +6,6 @@ Revision history for IO-File-Cycle
 0.02    4 Oct 2012
         Archive with GNU tar so old Archive::Tar doesn't blow chunks
 
+0.02    4 Oct 2012
+        Require IO::File in Build.PL
+

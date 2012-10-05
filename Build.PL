@@ -11,10 +11,10 @@ my $builder = Module::Build->new(
     configure_requires => { 'Module::Build' => 0.40 },
     build_requires => {
         'Test::More' => 0,
-	'IO::File' => 0,
     },
     requires => {
         'perl' => 5.006,
+	'IO::File' => 0,
     },
     add_to_cleanup      => [ 'IO-File-Cycle-*' ],
     create_makefile_pl => 'traditional',

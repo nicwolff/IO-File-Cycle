@@ -77,7 +77,7 @@ sub format_filename {
 
 =head2 cycle()
 
-Closes the current file, then opens a new file with an incremented number in the filename (before the extension if there is one, and after a "."). After closing the initial file, it renames it to have the index "1" – for example, "filename.1.ext".
+Closes the current file, then opens a new file with an incremented number in the filename (before the extension if there is one, and after a "."). After closing the initial file, it renames it to have the index "1" - for example, "filename.1.ext".
 
 =cut
 
